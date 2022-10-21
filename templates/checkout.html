@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <ul class="list-group" id="item-list">
+            <h3 class="text-center"> Votre Commande </h3>
+
+        </ul>
+    </div>
+</div>
+<br>
+    <br>
+        <br>
+</br>
+<div class="row">
+    <div class="col-md-12">
+        <form method="POST">
+          {% csrf_token %}
+            <input type="hidden" id="items", name="items">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="nom">Nom(s)</label>
+              <input type="text" id="nom" name="nom" class="form-control" placeholder="Inscrivez votre nom">
+            </div>
+               <div class="form-group col-md-6">
+            <label for="prenom">Prenoms(s)</label>
+            <input type="text" name="prenom" class="form-control" id="prenom" placeholder="Inscrivez votre prenom">
+          </div>
+            <div class="form-group col-md-6">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="Email">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="telephone">Numero de telephone</label>
+              <input type="number" id="telephone" name="telephone" class="form-control" placeholder="Numero de telephone">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="adresse">Adresse</label>
+            <input type="text" id="adresse" name="adresse" class="form-control" placeholder="Rue, Quartier, Arrondissement">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="ville">Ville</label>
+                <select id="ville" name="ville" class="form-control">
+                <option selected>Libreville</option>
+                <option>Port-Gentil</option>
+                <option>Franceville</option>
+                <option>Oyem</option>
+                <option>Lambarene</option>
+                <option>Mouila</option>
+                <option>Moanda</option>
+                <option>Tchibanga</option>
+                <option>Koulamoutou</option>
+                <option>Lambarene</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pays">Pays</label>
+              <select  id="pays" name="pays" class="form-control">
+                <option selected>Gabon</option>
+
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="codepostal">Code Postal</label>
+              <input type="text" class="form-control" id="codepostal" name="codepostal">
+            </div>
+          </div>
+            <div class="form-group col-md-2">
+              <label for="total">Montant total</label>
+              <input type="readonly" class="bg-dark text-warning form-control" id="total" name="total">
+            </div>
+          <div class="form-group">
+
+          </div>
+          <button type="submit" class="btn btn-primary">Commander</button>
+        </form>
+    </div>
+</div>
+<br>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        if(localStorage.getItem('panier')==null){
+            var panier = {};
+
+        }else{
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        var total = 0;
+        var nombre = 0;
+        for(item in panier){
+            let nom = panier[item][1];
+            let quantite = panier[item][0];
+            let prix = panier[item][2]
+            nombre += quantite;
+            total += prix;
+            let itemString = ` <li class="list-group-item d-flex justify-content-between align-items-center">
+             ${nom}
+              <span class="badge badge-primary badge-pill">QTE: ${quantite}</span>
+             <span class="badge badge-primary badge-pill"> ${prix} Fcfa </span>
+            </li>`;
+            $('#item-list').append(itemString);
+        }
+        let itemNombre = ` <li class="list-group-item d-flex justify-content-between align-items-center">
+              <h5 class="bg-danger">Total:</h5>
+              <span class="badge badge-danger badge-pill"> Quantites: ${nombre}</span>
+              <span class="badge badge-danger badge-pill"> Total: ${total} Fcfa </span>
+            </li>`;
+            $('#item-list').append(itemNombre);
+            $('#total').val(total+" Fcfa");
+
+        $('#items').val(JSON.stringify(panier));
+
+    </script>
+
+{% endblock %}

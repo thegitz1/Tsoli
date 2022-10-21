@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h3> {{ object.titre }} </h3>
+<h4> {{ object.prix }}</h4>
+
+<form action="." method="POST"> {% csrf_token %}
+    <h2> Voulez-vous supprimer "{{ object.titre }}" ? </h2>
+    <p><input type="submit" value="Yes"/> <a href="../"> Supprimer </a></p>
+
+</form>
+
+{% endblock %}
